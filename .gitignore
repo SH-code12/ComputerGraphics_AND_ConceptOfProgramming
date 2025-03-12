@@ -1,0 +1,43 @@
+# Ignore CLion project files
+.idea/
+
+# Ignore build directories
+cmake-build-debug/
+cmake-build-release/
+cmake-build-*/
+
+# Ignore CMake files
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles/
+Testing/
+Makefile
+cmake_install.cmake
+compile_commands.json
+
+# Ignore compiled binaries and object files
+*.o
+*.obj
+*.so
+*.a
+*.lib
+*.dll
+*.exe
+*.out
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+*.swp
+*.swo
+
+# Ignore dependency management files
+external/
+vcpkg_installed/
+
+# Ignore CLion-generated remote deployment files
+.clion*
+
+# Ignore package manager files (if using Conan)
+conanbuildinfo.*
+conan.lock
