@@ -9,38 +9,53 @@ int Round(double x)
     return (int)(x + 0.5);
 }
 
-void Draw8Points(HDC hdc, int Xc, int Yc, int x, int y, COLORREF c) {
-    SetPixel(hdc, Xc + x, Yc + y, c);
-    SetPixel(hdc, Xc + x, Yc - y, c);
-    SetPixel(hdc, Xc - x, Yc + y, c);
-    SetPixel(hdc, Xc - x, Yc - y, c);
-    SetPixel(hdc, Xc + y, Yc + x, c);
-    SetPixel(hdc, Xc + y, Yc - x, c);
-    SetPixel(hdc, Xc - y, Yc + x, c);
-    SetPixel(hdc, Xc - y, Yc - x, c);
-}
-
-void DrawLineBres(HDC hdc, int X1, int Y1, int X2,int Y2, COLORREF c)
+void DrawLineBres(HDC hdc, int X1, int Y1, int X2, int Y2, COLORREF c)
 {
-    int dx = X2 - X1; int dy = Y2 - Y1; 
-    int d = dx - 2 * dy;
-    int d1 = -2 * dy; 
-    int d2 = 2 *(dx - dy);
-    int X = X1, Y = Y1;
+    int dx = abs(X2 - X1);
+    int dy = abs(Y2 - Y1);
+
+    int X = X1;
+    int Y = Y1;
+    // increment with correct direction
+    int x_inc = (X2 > X1) ? 1 : -1;
+    int y_inc = (Y2 > Y1) ? 1 : -1;
+
     SetPixel(hdc, X, Y, c);
-    while (X < X2) {
-        if (d > 0) {
-            d += d1;
-            X++;
+
+    if (dx > dy) {
+        int d = 2 * dy - dx;
+        int d1 = 2 * dy;
+        int d2 = 2 * (dy - dx);
+
+        while (X != X2) {
+            if (d < 0)
+                d += d1;
+            else {
+                d += d2;
+                Y += y_inc;
+            }
+            X += x_inc;
+            SetPixel(hdc, X, Y, c);
         }
-        else {
-            d += d2;
-            X++;
-            y++;
+    }
+    else {
+        int d = 2 * dx - dy;
+        int d1 = 2 * dx;
+        int d2 = 2 * (dx - dy);
+
+        while (Y != Y2) {
+            if (d < 0)
+                d += d1;
+            else {
+                d += d2;
+                X += x_inc;
+            }
+            Y += y_inc;
+            SetPixel(hdc, X, Y, c);
         }
-        SetPixel(hdc, X, Y, c);
     }
 }
+
 
 int X1, Y1, X2, Y2; // Global variables to store line endpoints
 
