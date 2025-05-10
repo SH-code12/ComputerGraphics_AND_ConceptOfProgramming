@@ -5,4 +5,6 @@ set(CMAKE_CXX_STANDARD 14)
 
 add_executable(Practice
         DrawCircle.cpp
-        LineDraw.cpp)
+        LineDraw.cpp 
+        DrawInterpolatedColoredLine.cpp 
+        )
