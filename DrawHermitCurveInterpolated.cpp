@@ -9,7 +9,7 @@ int Round(double x)
     return (int)(x + 0.5);
 }
 // Hermit Curve 
-void DrawHermitCurve(HDC hdc, int X1, int Y1, int U1, int V1, int X2, int Y2, int U2, int V2, COLORREF c)
+void DrawHermitCurve(HDC hdc, int X1, int Y1, int U1, int V1, int X2, int Y2, int U2, int V2, COLORREF C1, COLORREF C2)
 {
     int alpha1 = 2 * X1 + U1 - 2 * X2 + U2;
     int beta1 = -3 * X1 - 2 * U1 + 3 * X2 - U2;
@@ -22,6 +22,21 @@ void DrawHermitCurve(HDC hdc, int X1, int Y1, int U1, int V1, int X2, int Y2, in
     int gama2 = V1;
     int delta2 = Y1;
 
+    // extract colore values
+    //Red Color
+    int r1 = GetRValue(C1);
+    int r2 = GetRValue(C2);
+    // Green Color
+    int g1 = GetGValue(C1);
+    int g2 = GetGValue(C2);
+    // Blue Color
+    int b1 = GetBValue(C1);
+    int b2 GetBValue(C2);
+
+    int alphaR = r2 - r1;
+    int alphaG = g2 - g1;
+    int alphaB = b2 - b1;
+
     double numberOfPoints = 100.0;
     double step = 1.0 / numberOfPoints;
 
@@ -30,14 +45,20 @@ void DrawHermitCurve(HDC hdc, int X1, int Y1, int U1, int V1, int X2, int Y2, in
         int X = alpha1 * (t * t * t) + beta1 * (t * t) + gama1 * t + delta1;
         int Y = alpha2 * (t * t * t) + beta2 * (t * t) + gama2 * t + delta2;
 
-        SetPixel(hdc, Round(X), Round(Y), c);
+        int R = Round(alphaR * t + r1);
+        int G = Round(alphaG * t + g1);
+        int B = Round(alphaB * t + b1);
+        //SetPixel(hdc, X, Y, RGB(R, G, B));
+
+        SetPixel(hdc, Round(X), Round(Y), RGB(R, G, B));
+
 
     }
 
 
 
 }
-  
+
 
 // Global variables
 int X1 = 0, Y1 = 0, X2 = 0, Y2 = 0;
@@ -62,7 +83,7 @@ LRESULT WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
 
         // Draw the line
         hdc = GetDC(hwnd);
-        DrawHermitCurve(hdc, X1, Y1, U1, V1, X2, Y2, U2, V2, RGB(0,0,0));
+        DrawHermitCurve(hdc, X1, Y1, U1, V1, X2, Y2, U2, V2, RGB(255, 0, 0), RGB(255, 255, 0));
         ReleaseDC(hwnd, hdc);
         break;
     }
@@ -73,7 +94,7 @@ LRESULT WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
         hdc = BeginPaint(hwnd, &ps);
 
         // Redraw the line when window repaints
-        DrawHermitCurve(hdc, X1, Y1, U1, V1, X2, Y2, U2, V2, RGB(0,0,0));
+        DrawHermitCurve(hdc, X1, Y1, U1, V1, X2, Y2, U2, V2, RGB(255, 0, 0), RGB(255, 255, 0));
 
         EndPaint(hwnd, &ps);
         break;
